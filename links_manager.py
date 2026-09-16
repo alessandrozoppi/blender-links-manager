@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Links Manager",
     "author": "Sintesi Labs Design GmbH",
-    "version": (0, 0, 2),
+    "version": (1, 0, 0),
     "blender": (4, 2, 0),
     "location": "3D Viewport > Sidebar > Links Manager",
     "description": "Adds a UI panel to quickly see, reload, open and find linked libraries",
