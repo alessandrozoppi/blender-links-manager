@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Links Manager",
     "author": "Sintesi Labs Design GmbH",
-    "version": (0, 0, 2),
+    "version": (1, 0, 0),
     "blender": (4, 2, 0),
     "location": "3D Viewport > Sidebar > Links Manager",
     "description": "Adds a UI panel to quickly see, reload, open and find linked libraries",
@@ -11,6 +11,7 @@ bl_info = {
 
 
 import bpy
+import subprocess
 from bpy import props
 
 
@@ -35,8 +36,14 @@ def reload_linked(linked_list):
 def get_linked_libraries():
     '''Returns a list of linked libraries used in the current scene'''
     linked_libs = bpy.data.libraries
+    linked_libs_filtered = []
+    
+    # Filters out appended libraries, duplicates, copybuffer (no users_id)
+    for lib in linked_libs:
+        if len(lib.users_id) > 0:
+            linked_libs_filtered.append(lib)
 
-    return linked_libs
+    return linked_libs_filtered
 
 
 def get_target_lib(target_lib_index):
@@ -48,7 +55,7 @@ def get_target_lib(target_lib_index):
 
 
 def delete_target_lib(target_lib):
-    '''Delete the target Linked Library'''
+    '''Delete the target linked Library'''
     bpy.data.batch_remove(ids=(target_lib,))
 
 
@@ -58,8 +65,6 @@ def open_target_lib(target_lib_index):
     target_lib = linked_libs[target_lib_index]
     target_filepath = target_lib.filepath
     target_abspath = bpy.path.abspath(target_filepath)
-
-    import subprocess
 
     subprocess.Popen(['blender', target_abspath])
 
